@@ -6,7 +6,7 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:43:04 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/19 17:22:11 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/20 16:14:26 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 # include "libft/ft_printf.h"
 # include "libft/get_next_line.h"
 
+extern int client;
+extern int server;
+
 int	ft_strcmp(char *s1, char *s2);
-int	check_pid(int pid);
 
 #endif
