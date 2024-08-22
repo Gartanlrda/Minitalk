@@ -6,65 +6,60 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:38:13 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/20 17:40:24 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/22 08:02:30 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int client;
-
-static void    encode(int pid, unsigned char *encode)
+static void	encode(int pid, char c)
 {
-    static const int signals[] = {SIGUSR2, SIGUSR1};
-	unsigned int i;
-	
-	i = 1;
-    while (*encode)
-    {
-        i = 1 << 7;
-        while (i)
-        {
-			if (*encode & i)
-            	kill(pid, signals[1]);
-			else
-            	kill(pid, signals[0]);
-            i >>= 1;
-			if (signal(SIGUSR1, NULL))
-				pause;
-        }
-        encode++;
-    }
+	int	i;
+
+	i = 0;
+	while (i < 8)
+	{
+		if (c & (0x01 << i))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		usleep(750);
+		i++;
+	}
 }
 
-static void    encode_pid(int pid, unsigned char *encode)
+static void	say_ok(int sign, siginfo_t *info, void *context)
 {
-    static const int signals[] = {SIGUSR2, SIGUSR1};
-	unsigned int i;
-	
-	i = 1;
-    while (*encode)
-    {
-        i = 1 << 7;
-        while (i)
-        {
-			if (*encode & i)
-            	kill(pid, signals[1]);
-			else
-            	kill(pid, signals[0]);
-            i >>= 1;
-			usleep(100);
-        }
-        encode++;
-    }
+	info = 0;
+	(void)context;
+	if (sign == SIGUSR1)
+		ft_printf("Message envoye avec succes!\n");
+	exit (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv)
 {
-	client = getpid();
+	int					client;
+	int					server;
+	int					i;
+	struct sigaction	sign;
+
+	sign.sa_sigaction = say_ok;
+	sigemptyset(&sign.sa_mask);
+	sign.sa_flags = 0;
 	if (argc == 3)
 	{
-		encode_pid(ft_atoi(argv[1]), ft_itoa((unsigned char*)client));
-		encode(ft_atoi(argv[1]), (unsigned char*)argv[2]);
+		i = -1;
+		server = ft_atoi(argv[1]);
+		client = getpid();
+		ft_printf("Envoi du message %s en cours..\n", ft_itoa(client));
+		while (++i < ft_strlens(ft_itoa(client)))
+			encode(server, ft_itoa(client)[i]);
+		i = -1;
+		sigaction(SIGUSR1, &sign, NULL);
+		while (++i < ft_strlens(argv[2]))
+			encode(server, argv[2][i]);
+		encode(server, '\n');
+		encode(server, '\0');
 	}
 }
