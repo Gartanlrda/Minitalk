@@ -6,7 +6,7 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:38:09 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/22 09:39:05 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/22 10:17:06 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,26 @@ static void	decode(int sign, siginfo_t *info, void *context)
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	struct sigaction	sign;
 
-	sign.sa_sigaction = decode;
-	sigemptyset(&sign.sa_mask);
-	sign.sa_flags = 0;
-	ft_printf("[SERVER PID]: -%i-\n", getpid());
-	while (1)
+	argv[1] = NULL;
+	if (argc > 1)
 	{
-		sigaction(SIGUSR1, &sign, NULL);
-		sigaction(SIGUSR2, &sign, NULL);
+		ft_printf("Error\n");
+		return (1);
+	}
+	else
+	{
+		sign.sa_sigaction = decode;
+		sigemptyset(&sign.sa_mask);
+		sign.sa_flags = 0;
+		ft_printf("[SERVER PID]: -%i-\n", getpid());
+		while (1)
+		{
+			sigaction(SIGUSR1, &sign, NULL);
+			sigaction(SIGUSR2, &sign, NULL);
+		}
 	}
 }
