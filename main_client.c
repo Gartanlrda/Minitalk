@@ -6,7 +6,7 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:38:13 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/22 08:02:30 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/22 09:57:46 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	say_ok(int sign, siginfo_t *info, void *context)
 
 int	main(int argc, char **argv)
 {
-	int					client;
+	char				*client;
 	int					server;
 	int					i;
 	struct sigaction	sign;
@@ -51,11 +51,12 @@ int	main(int argc, char **argv)
 	{
 		i = -1;
 		server = ft_atoi(argv[1]);
-		client = getpid();
-		ft_printf("Envoi du message %s en cours..\n", ft_itoa(client));
-		while (++i < ft_strlens(ft_itoa(client)))
-			encode(server, ft_itoa(client)[i]);
+		client = ft_itoa(getpid());
+		ft_printf("Envoi du message %s en cours..\n", client);
+		while (++i < ft_strlens(client))
+			encode(server, client[i]);
 		i = -1;
+		free(client);
 		sigaction(SIGUSR1, &sign, NULL);
 		while (++i < ft_strlens(argv[2]))
 			encode(server, argv[2][i]);
