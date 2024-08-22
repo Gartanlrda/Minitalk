@@ -6,7 +6,7 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:38:09 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/22 09:23:33 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/22 09:39:05 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ static void	decode(int sign, siginfo_t *info, void *context)
 			return ;
 		}
 		if (c == '\0')
-		{
-			kill(client, SIGUSR1);
-			client = 0;
-		}
+			client = 0 * kill(client, SIGUSR1);
 		ft_putchar(c);
 		c = 0;
 		bit = 0;
