@@ -6,7 +6,7 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:43:04 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/22 08:01:00 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/27 15:45:48 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@
 # include "libft/libft.h"
 # include "libft/ft_printf.h"
 # include "libft/get_next_line.h"
+# include "stdbool.h"
 
 #endif

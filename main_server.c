@@ -6,7 +6,7 @@
 /*   By: ggoy <ggoy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:38:09 by ggoy              #+#    #+#             */
-/*   Updated: 2024/08/22 10:17:06 by ggoy             ###   ########.fr       */
+/*   Updated: 2024/08/27 18:56:28 by ggoy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,36 @@
 
 static void	decode(int sign, siginfo_t *info, void *context)
 {
-	static int		client = 0;
+	pid_t			client;
 	static int		bit = 0;
 	static char		c = 0;
 
 	(void)context;
-	info->si_pid;
+	client = info->si_pid;
+	// printf("pid: %i\n", info->si_uid);
 	if (sign == SIGUSR1)
 		c |= (0x01 << bit);
 	bit++;
 	if (bit == 8)
 	{
-		if (client < 100000)
-		{
-			client = client * 10 + (c - 48);
-			c = 0;
-			bit = 0;
-			return ;
-		}
+		// if (client < 100000)
+		// {
+		// 	client = client * 10 + (c - 48);
+		// 	c = 0;
+		// 	bit = 0;
+		// 	printf("%i\n", client);
+		// 	return ;
+		// }
 		if (c == '\0')
-			client = 0 * kill(client, SIGUSR1);
+			kill(client, SIGUSR2);
+			// client = 0 * kill(client, SIGUSR2);
 		ft_putchar(c);
 		c = 0;
 		bit = 0;
 	}
+	usleep(200);
+	if (kill(client, SIGUSR1) < 0)
+		printf("h\n");
 }
 
 int	main(int argc, char **argv)
@@ -54,7 +60,7 @@ int	main(int argc, char **argv)
 	{
 		sign.sa_sigaction = decode;
 		sigemptyset(&sign.sa_mask);
-		sign.sa_flags = 0;
+		sign.sa_flags = SA_SIGINFO;
 		ft_printf("[SERVER PID]: -%i-\n", getpid());
 		while (1)
 		{
